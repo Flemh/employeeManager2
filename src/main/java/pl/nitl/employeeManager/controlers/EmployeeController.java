@@ -26,7 +26,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/employee/{eid}")
-    public String deleteEmployee(@PathVariable int eid) {
+    public String psujepsuje(@PathVariable int eid) {
+        System.out.println("a tak  se tam");
         Employee e = repository.getOne(eid);
         repository.delete(e);
         return "deleted";
@@ -34,6 +35,7 @@ public class EmployeeController {
 
     @GetMapping("employees")
     public List<Employee> getEmployees() {
+        System.out.println("Ten kometarz ma zostac");
         return repository.findAll();
     }
 
