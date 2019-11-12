@@ -23,7 +23,7 @@ public class EmployeeController {
     @PostMapping("/employee")
     public Employee addEmployee(@RequestBody EmployeeDto employeeDto) {
         Employee mappedEmployee = mapper.employeeDtoToEmployee(employeeDto);
-        log.info("adding new employee " + employeeDto + "and mapping it to " + mappedEmployee);
+        log.info("adding new employee {} and mapping it to {}", employeeDto, mappedEmployee);
         repository.save(mappedEmployee);
         return mappedEmployee;
     }
@@ -31,31 +31,28 @@ public class EmployeeController {
     @PutMapping(path = "/employee", consumes = {"application/json"})
     public Employee updateOrSaveEmployee(@RequestBody EmployeeDto employeeDto) {
         Employee mappedEmployee = mapper.employeeDtoToEmployee(employeeDto);
-        log.info("adding new employee " + employeeDto + "and mapping it to " + mappedEmployee);
+        log.info("adding new employee {} and mapping it to {}", employeeDto, mappedEmployee);
         repository.save(mappedEmployee);
         return mappedEmployee;
     }
 
     @DeleteMapping("/employee/{eid}")
-    public String deleteEmployee(@PathVariable int eid) {
-
+    public void deleteEmployee(@PathVariable int eid) {
         Employee e = repository.findById(eid)
                 .orElseThrow(() -> new EmployeeNotFoundException(eid));
-        log.info("adding new employee " + e);
+        log.info("adding new employee {}", e);
         repository.delete(e);
-        return "deleted";
     }
 
     @GetMapping("employees")
     public List<Employee> getEmployees() {
-        log.info("Ten kometarz ma zostac");
         log.info("showing all employees");
         return repository.findAll();
     }
 
     @GetMapping("employee/{eid}")
     public Employee getEmployee(@PathVariable("eid") int eid) {
-        log.info("showing employee with id " + eid);
+        log.info("showing employee with id {}", eid);
         return repository.findById(eid)
                 .orElseThrow(() -> new EmployeeNotFoundException(eid));
     }

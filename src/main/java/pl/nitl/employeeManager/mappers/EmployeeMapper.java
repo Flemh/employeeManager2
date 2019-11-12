@@ -6,19 +6,19 @@ import org.mapstruct.Mappings;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EmployeeMapper {
     @Mappings({
-            @Mapping(target = "employeeId", source = "entity.eid"),
-            @Mapping(target = "firstName", source = "entity.fname"),
-            @Mapping(target = "lastName", source = "entity.lname")
+            @Mapping(target = "employeeId", source = "eid"),
+            @Mapping(target = "firstName", source = "fname"),
+            @Mapping(target = "lastName", source = "lname")
     })
     EmployeeDto employeeToEmployeeDto(Employee entity);
 
     @Mappings({
-            @Mapping(target = "eid", source = "dto.employeeId"),
-            @Mapping(target = "fname", source = "dto.firstName"),
-            @Mapping(target = "lname", source = "dto.lastName")
+            @Mapping(target = "eid", source = "employeeId"),
+            @Mapping(target = "fname", source = "firstName"),
+            @Mapping(target = "lname", source = "lastName")
     })
     Employee employeeDtoToEmployee(EmployeeDto dto);
 

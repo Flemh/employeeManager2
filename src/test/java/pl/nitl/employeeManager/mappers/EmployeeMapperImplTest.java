@@ -14,11 +14,12 @@ class EmployeeMapperImplTest {
 
     @Test
     void employeeToEmployeeDto() {
-        Employee entity = new Employee();
-        entity.setEid(2);
-        entity.setFname("John");
-        entity.setLname("Wick");
-        entity.setPesel(7923799);
+        Employee entity = Employee.builder()
+                .eid(2)
+                .fname("John")
+                .lname("Wick")
+                .pesel(7923799)
+                .build();
 
         EmployeeDto dto = mapper.employeeToEmployeeDto(entity);
 
@@ -30,11 +31,12 @@ class EmployeeMapperImplTest {
 
     @Test
     void employeeDtoToEmployee() {
-        EmployeeDto dto = new EmployeeDto();
-        dto.setEmployeeId(1);
-        dto.setFirstName("John");
-        dto.setLastName("Wick");
-        dto.setPesel(7923799);
+        EmployeeDto dto = EmployeeDto.builder()
+                .employeeId(2)
+                .firstName("John")
+                .lastName("Wick")
+                .pesel(7923799)
+                .build();
 
         Employee entity = mapper.employeeDtoToEmployee(dto);
 
