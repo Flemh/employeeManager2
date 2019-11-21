@@ -3,14 +3,12 @@ package pl.nitl.employeeManager.Services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.nitl.employeeManager.exceptions.EmployeeNotFoundException;
-import pl.nitl.employeeManager.exceptions.IncorrectAdressesListSizeException;
-import pl.nitl.employeeManager.exceptions.IncorrectSizeLastNameException;
-import pl.nitl.employeeManager.exceptions.IncorrectZameldowaniaNumberException;
-import pl.nitl.employeeManager.models.Adress;
-import pl.nitl.employeeManager.models.AdressType;
+import pl.nitl.employeeManager.exceptions.*;
+import pl.nitl.employeeManager.models.Address;
+import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.respositories.EmployeeRespository;
+
 import java.util.List;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -20,35 +18,41 @@ import static java.lang.Boolean.TRUE;
 public class EmployeeService {
 
     @Autowired
-    EmployeeRespository repository;
+    private EmployeeRespository repository;
 
     public Employee checkAndSave(Employee employee) {
 
         employee.setActive(FALSE);
-        int adressesSize = employee.getAdresses().size();
+        int addressesSize = employee.getAddresses().size();
 
-        if(adressesSize<= 0 || adressesSize>2) throw new IncorrectAdressesListSizeException(employee.getFname());
+        if(addressesSize<= 0 || addressesSize>2) {
+            throw new IncorrectAddressesListSizeException(employee.getFname());
+        }
         else {
             int zameldowaniaCounter = 0;
-            for (Adress a : employee.getAdresses()){
-                if(a.getAdressType()== AdressType.ZAMELDOWANIA)
-                zameldowaniaCounter++;
+            for (Address a : employee.getAddresses()){
+                if(a.getAddressType() == AddressType.ZAMELDOWANIA) {
+                    zameldowaniaCounter++;
+                }
             }
-            if(zameldowaniaCounter==0 || zameldowaniaCounter>1) throw new IncorrectZameldowaniaNumberException(employee.getFname());
+            if(zameldowaniaCounter == 0 || zameldowaniaCounter > 1) {
+                throw new IncorrectZameldowaniaNumberException(employee.getFname());
+            }
             else {
-                employee.getAdresses().forEach(adress -> adress.setEmployeeRef(employee));
+                employee.getAddresses().forEach(address -> address.setEmployeeRef(employee));
                 employee.setActive(TRUE);
-                repository.save(employee);
-                return employee;
+                return repository.save(employee);
             }
         }
-
     }
-    public Employee chceckAndUpdate(Employee employee, int id){
-        if (repository.findById(id)==null ) throw new EmployeeNotFoundException(id);
+
+    public Employee checkAndUpdate(Employee employee, int id){
+        if(repository.findById(id).isEmpty()){
+            throw new EmployeeNotFoundException(id);
+        }
         else {
-            if(employee.getEid()==0 ) employee.setEid(id);
-            employee.getAdresses().forEach(adress -> adress.setEmployeeRef(employee));
+            employee.setEid(id);
+            employee.getAddresses().forEach(address -> address.setEmployeeRef(employee));
             repository.save(employee);
             return employee;
         }
@@ -57,8 +61,28 @@ public class EmployeeService {
     public void delete(int id){
         Employee e = repository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
-        if(e.getLname().length() == 5) repository.delete(e);
-        else throw new IncorrectSizeLastNameException(id);
+            repository.delete(e);
+    }
+
+    public void deleteWith5(){
+        List<Employee> allEmployees = repository.findAll();
+
+        if (allEmployees == null) {
+            throw new EmptyListException();
+        }
+        else{
+            boolean thereIsNoOneWith5 = TRUE;
+
+            for (Employee e : allEmployees){
+                if(e.getLname().length() == 5) {
+                    repository.delete(e);
+                    thereIsNoOneWith5 = FALSE;
+                }
+            }
+            if (thereIsNoOneWith5) {
+                throw new ThereIsNoOneWith5Exception();
+            }
+        }
     }
 
     public List<Employee> showAll(){
@@ -71,5 +95,4 @@ public class EmployeeService {
         return repository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
-
 }

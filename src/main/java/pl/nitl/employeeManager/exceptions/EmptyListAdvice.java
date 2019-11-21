@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class IncorrectAdressesListSizeAdvice {
+public class EmptyListAdvice {
 
-    @ResponseBody
-    @ExceptionHandler(IncorrectAdressesListSizeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String IncorrectAdressesListSizeHandler(IncorrectAdressesListSizeException ex) {
-        return ex.getMessage();
-    }
+        @ResponseBody
+        @ExceptionHandler(EmptyListException.class)
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        String emptyListExceptionHandler(EmptyListException ex) {
+            return ex.getMessage();
+        }
 }

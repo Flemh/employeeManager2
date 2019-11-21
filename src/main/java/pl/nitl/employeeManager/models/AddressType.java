@@ -1,6 +1,7 @@
 package pl.nitl.employeeManager.models;
 
-public enum AdressType {
+public enum AddressType {
+
     ZAMIESZKANIA,
     KORESPONDENCYJNY,
     ZAMELDOWANIA;

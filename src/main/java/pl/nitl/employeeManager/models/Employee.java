@@ -1,7 +1,6 @@
 package pl.nitl.employeeManager.models;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,18 +10,23 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int eid;
+
     private String fname;
+
     private String lname;
+
     private int pesel;
+
     private boolean active;
+
     @OneToMany(mappedBy = "employeeRef",cascade = CascadeType.ALL)
     @Singular
-    private List<Adress> adresses;
+    private List<Address> addresses;
 
 
 }

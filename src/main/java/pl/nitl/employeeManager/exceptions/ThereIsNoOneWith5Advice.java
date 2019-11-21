@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class IncorrectZameldowaniaNumberAdvice {
+public class ThereIsNoOneWith5Advice {
 
     @ResponseBody
-    @ExceptionHandler(IncorrectZameldowaniaNumberException.class)
+    @ExceptionHandler(ThereIsNoOneWith5Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String IncorrectZameldowaniaNumberHandler(IncorrectZameldowaniaNumberException ex) {
+    String ThereIsNoOneWith5Handler(ThereIsNoOneWith5Exception ex) {
         return ex.getMessage();
     }
 }

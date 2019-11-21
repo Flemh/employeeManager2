@@ -8,6 +8,7 @@ import pl.nitl.employeeManager.Services.EmployeeService;
 import pl.nitl.employeeManager.mappers.EmployeeMapper;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -15,24 +16,25 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    EmployeeService service;
+    private EmployeeService service;
+
     private EmployeeMapper mapper
             = Mappers.getMapper(EmployeeMapper.class);
 
     @PostMapping("/employee")
-    public Employee addEmployee(@RequestBody EmployeeDto employeeDto) {
+    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDto) {
         Employee mappedEmployee = mapper.employeeDtoToEmployee(employeeDto);
         log.info("adding new employee {} and mapping it to {}", employeeDto, mappedEmployee);
         Employee newEmployee = service.checkAndSave(mappedEmployee);
-        return newEmployee;
+        return mapper.employeeToEmployeeDto(newEmployee);
     }
 
     @PutMapping(path = "/employee/{eid}", consumes = {"application/json"})
-    public Employee updateEmployee(@RequestBody EmployeeDto employeeDto,@PathVariable int eid) {
+    public EmployeeDto updateEmployee(@RequestBody EmployeeDto employeeDto,@PathVariable("eid") int eid) {
         Employee mappedEmployee = mapper.employeeDtoToEmployee(employeeDto);
         log.info("adding new employee {} and mapping it to {}", employeeDto, mappedEmployee);
-        Employee updatedEmployee = service.chceckAndUpdate(mappedEmployee, eid);
-        return updatedEmployee;
+        Employee updatedEmployee = service.checkAndUpdate(mappedEmployee, eid);
+        return mapper.employeeToEmployeeDto(updatedEmployee);
     }
 
     @DeleteMapping("/employee/{eid}")
@@ -40,14 +42,27 @@ public class EmployeeController {
        service.delete(eid);
     }
 
+    @DeleteMapping("/employees")
+    public void deleteEmployeeWith5SignsLastName() {
+        service.deleteWith5();
+    }
+
     @GetMapping("employees")
-    public List<Employee> getEmployees() {
-     return service.showAll();
+    public List<EmployeeDto> getEmployees() {
+        List<Employee> employeeList = service.showAll();
+        List<EmployeeDto> mappedEmployeeList = new ArrayList<>();
+
+        for(Employee e : employeeList) {
+            EmployeeDto mappedEmployee= mapper.employeeToEmployeeDto(e);
+            mappedEmployeeList.add(mappedEmployee);
+        }
+        return mappedEmployeeList;
     }
 
     @GetMapping("employee/{eid}")
-    public Employee getEmployee(@PathVariable("eid") int eid) {
-       return service.showOne(eid);
+    public EmployeeDto getEmployee(@PathVariable("eid") int eid) {
+        Employee employeeToShow = service.showOne(eid);
+        return mapper.employeeToEmployeeDto(employeeToShow);
     }
 
 }

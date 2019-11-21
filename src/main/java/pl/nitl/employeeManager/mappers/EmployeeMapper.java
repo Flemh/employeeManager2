@@ -3,11 +3,10 @@ package pl.nitl.employeeManager.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
 
-@Mapper(uses ={AdressMapper.class})
+@Mapper(uses ={AddressMapper.class})
 public interface EmployeeMapper {
 
     @Mappings({

@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class IncorrectSizeLastNameAdvice {
+public class IncorrectAddressesListSizeAdvice {
+
     @ResponseBody
-    @ExceptionHandler(IncorrectSizeLastNameException.class)
+    @ExceptionHandler(IncorrectAddressesListSizeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String IncorrectSizeLastNameHandler(IncorrectSizeLastNameException ex) {
+    String IncorrectAddressesListSizeHandler(IncorrectAddressesListSizeException ex) {
         return ex.getMessage();
     }
 }
