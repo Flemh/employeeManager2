@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.nitl.employeeManager.exceptions.*;
-import pl.nitl.employeeManager.models.Address;
 import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.respositories.EmployeeRespository;
-
 import java.util.List;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -26,41 +24,31 @@ public class EmployeeService {
         int addressesSize = employee.getAddresses().size();
 
         if(addressesSize<= 0 || addressesSize>2) {
-            throw new IncorrectAddressesListSizeException(employee.getFname());
+            throw new BadRequestException("incorrect quantity of addresses (0 or >2) for Employee: " + employee.getFname());
         }
-        else {
-            int zameldowaniaCounter = 0;
-            for (Address a : employee.getAddresses()){
-                if(a.getAddressType() == AddressType.ZAMELDOWANIA) {
-                    zameldowaniaCounter++;
-                }
+            long Counter = employee.getAddresses().stream().filter(address -> address.getAddressType() == AddressType.INVOICING).count();
+
+            if(Counter == 0 || Counter > 1) {
+                throw new  BadRequestException("incorrect quantity of Invoicing type addresses (0 or >1) for Employee: " + employee.getFname());
             }
-            if(zameldowaniaCounter == 0 || zameldowaniaCounter > 1) {
-                throw new IncorrectZameldowaniaNumberException(employee.getFname());
-            }
-            else {
                 employee.getAddresses().forEach(address -> address.setEmployeeRef(employee));
                 employee.setActive(TRUE);
                 return repository.save(employee);
-            }
-        }
     }
 
     public Employee checkAndUpdate(Employee employee, int id){
         if(repository.findById(id).isEmpty()){
-            throw new EmployeeNotFoundException(id);
+            throw new MyNotFoundException("Could not find Employee with id: "+id);
         }
-        else {
+
             employee.setEid(id);
             employee.getAddresses().forEach(address -> address.setEmployeeRef(employee));
-            repository.save(employee);
-            return employee;
-        }
+            return repository.save(employee);
     }
 
     public void delete(int id){
         Employee e = repository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+                .orElseThrow(() -> new MyNotFoundException("Could not find Employee with id: "+id));
             repository.delete(e);
     }
 
@@ -68,21 +56,13 @@ public class EmployeeService {
         List<Employee> allEmployees = repository.findAll();
 
         if (allEmployees == null) {
-            throw new EmptyListException();
+            throw new MyNotFoundException("List of Employees to delete is empty");
         }
-        else{
-            boolean thereIsNoOneWith5 = TRUE;
+        allEmployees.stream().filter(employee -> employee.getLname().length() == 5)
+                .findAny().orElseThrow(() -> new BadRequestException("There is no one with 5 letter last name"));
 
-            for (Employee e : allEmployees){
-                if(e.getLname().length() == 5) {
-                    repository.delete(e);
-                    thereIsNoOneWith5 = FALSE;
-                }
-            }
-            if (thereIsNoOneWith5) {
-                throw new ThereIsNoOneWith5Exception();
-            }
-        }
+        allEmployees.stream().filter(employee -> employee.getLname().length() == 5)
+                .forEach(employee -> repository.delete(employee));
     }
 
     public List<Employee> showAll(){
@@ -93,6 +73,6 @@ public class EmployeeService {
     public Employee showOne(int id){
         log.info("showing employee with id {}", id);
         return repository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+                .orElseThrow(() -> new MyNotFoundException("Could not find Employee with id: "+id));
     }
 }

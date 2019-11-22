@@ -25,8 +25,8 @@ class EmployeeMapperTest {
                 .lname("Wick")
                 .pesel(7923799)
                 .active(TRUE)
-                .address(Address.builder().addressId(1).addressType(AddressType.ZAMELDOWANIA).street("boczna").number(7).build())
-                .address(Address.builder().addressId(2).addressType(AddressType.ZAMIESZKANIA).street("mila").number(5).build())
+                .address(Address.builder().addressId(1).addressType(AddressType.CURRENT).street("boczna").number(7).build())
+                .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street("mila").number(5).build())
                 .build();
        entity.getAddresses().forEach(address -> address.setEmployeeRef(entity));
         //when
@@ -50,8 +50,8 @@ class EmployeeMapperTest {
                 .lastName("Wick")
                 .pesel(7923799)
                 .active(TRUE)
-                .address(AddressDto.builder().addressId(1).addressType(AddressType.ZAMELDOWANIA).street("boczna").number(7).build())
-                .address(AddressDto.builder().addressId(2).addressType(AddressType.ZAMIESZKANIA).street("mila").number(5).build())
+                .address(AddressDto.builder().addressId(1).addressType(AddressType.CURRENT).street("boczna").number(7).build())
+                .address(AddressDto.builder().addressId(2).addressType(AddressType.INVOICING).street("mila").number(5).build())
                 .build();
         //when
         Employee entity = mapper.employeeDtoToEmployee(dto);

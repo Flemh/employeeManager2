@@ -1,6 +1,5 @@
 package pl.nitl.employeeManager.mappers;
 
-import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import pl.nitl.employeeManager.models.Address;
@@ -23,13 +22,13 @@ class AddressMapperTest {
         //given
         Address address1 = Address.builder()
         .addressId(1)
-                .addressType(AddressType.ZAMELDOWANIA)
+                .addressType(AddressType.CURRENT)
                 .street("Boczna")
                 .number(3)
                 .build();
         Address address2 = Address.builder()
                 .addressId(2)
-                .addressType(AddressType.KORESPONDENCYJNY)
+                .addressType(AddressType.POSTAL)
                 .street("Lipna")
                 .number(8)
                 .build();
@@ -48,13 +47,13 @@ class AddressMapperTest {
         //given
         AddressDto address1 = AddressDto.builder()
                 .addressId(1)
-                .addressType(AddressType.ZAMELDOWANIA)
+                .addressType(AddressType.CURRENT)
                 .street("Boczna")
                 .number(3)
                 .build();
         AddressDto address2 = AddressDto.builder()
                 .addressId(2)
-                .addressType(AddressType.KORESPONDENCYJNY)
+                .addressType(AddressType.POSTAL)
                 .street("Lipna")
                 .number(8)
                 .build();

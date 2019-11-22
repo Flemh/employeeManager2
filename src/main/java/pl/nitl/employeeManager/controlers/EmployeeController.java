@@ -10,6 +10,8 @@ import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -50,13 +52,9 @@ public class EmployeeController {
     @GetMapping("employees")
     public List<EmployeeDto> getEmployees() {
         List<Employee> employeeList = service.showAll();
-        List<EmployeeDto> mappedEmployeeList = new ArrayList<>();
-
-        for(Employee e : employeeList) {
-            EmployeeDto mappedEmployee= mapper.employeeToEmployeeDto(e);
-            mappedEmployeeList.add(mappedEmployee);
-        }
-        return mappedEmployeeList;
+        return employeeList.stream()
+                .map(employee -> mapper.employeeToEmployeeDto(employee))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("employee/{eid}")
