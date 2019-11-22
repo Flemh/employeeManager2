@@ -5,23 +5,23 @@ import org.mapstruct.factory.Mappers;
 import pl.nitl.employeeManager.models.Address;
 import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.views.AddressDto;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertNull;
 
 class AddressMapperTest {
     private AddressMapper mapper
             = Mappers.getMapper(AddressMapper.class);
+
     @Test
     void addressToAddressDto() {
         //given
         Address address1 = Address.builder()
-        .addressId(1)
+                .addressId(1)
                 .addressType(AddressType.CURRENT)
                 .street("Boczna")
                 .number(3)
@@ -64,6 +64,6 @@ class AddressMapperTest {
         List<Address> addressesEntity = mapper.addressDtoToAddress(addressesDto);
         //than
         assertThat(addressesEntity, hasSize(addressesDto.size()));
-        assertNull(null, mapper.addressDtoToAddress(null) );
+        assertNull(null, mapper.addressDtoToAddress(null));
     }
 }

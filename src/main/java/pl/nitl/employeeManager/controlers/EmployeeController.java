@@ -8,9 +8,8 @@ import pl.nitl.employeeManager.Services.EmployeeService;
 import pl.nitl.employeeManager.mappers.EmployeeMapper;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "/employee/{eid}", consumes = {"application/json"})
-    public EmployeeDto updateEmployee(@RequestBody EmployeeDto employeeDto,@PathVariable("eid") int eid) {
+    public EmployeeDto updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable("eid") int eid) {
         Employee mappedEmployee = mapper.employeeDtoToEmployee(employeeDto);
         log.info("adding new employee {} and mapping it to {}", employeeDto, mappedEmployee);
         Employee updatedEmployee = service.checkAndUpdate(mappedEmployee, eid);
@@ -41,7 +40,7 @@ public class EmployeeController {
 
     @DeleteMapping("/employee/{eid}")
     public void deleteEmployee(@PathVariable("eid") int eid) {
-       service.delete(eid);
+        service.delete(eid);
     }
 
     @DeleteMapping("/employees")

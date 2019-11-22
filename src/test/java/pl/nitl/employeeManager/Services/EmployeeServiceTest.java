@@ -10,10 +10,13 @@ import pl.nitl.employeeManager.exceptions.*;
 import pl.nitl.employeeManager.models.Address;
 import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.models.Employee;
-import pl.nitl.employeeManager.respositories.EmployeeRespository;
+import pl.nitl.employeeManager.respositories.EmployeeRepository;
+
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -22,11 +25,11 @@ class EmployeeServiceTest {
 
     private static final int ANY_INT = 27;
     private static final String ANY_STRING = "AnyString";
-    private static final String MORE_THAN_FIVE= "more than five";
-    private static final String FIVE_LONG_STRING= "five5";
+    private static final String MORE_THAN_FIVE = "more than five";
+    private static final String FIVE_LONG_STRING = "five5";
 
     @Mock
-    private EmployeeRespository mockRepo;
+    private EmployeeRepository mockRepo;
 
     @InjectMocks
     EmployeeService employeeService = new EmployeeService();
@@ -43,13 +46,13 @@ class EmployeeServiceTest {
                 .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street("anyString").number(ANY_INT).build())
                 .build();
         //when
-       employeeService.checkAndSave(employee);
-       //than
-        verify(mockRepo,times(1)).save(any(Employee.class));
+        employeeService.checkAndSave(employee);
+        //than
+        verify(mockRepo, times(1)).save(any(Employee.class));
     }
 
     @Test
-    void checkAndSaveShouldThrowIncorrectAddressesListSizeException(){
+    void checkAndSaveShouldThrowIncorrectAddressesListSizeException() {
         //given
         Employee employee = Employee.builder()
                 .eid(1)
@@ -62,10 +65,11 @@ class EmployeeServiceTest {
                 .build();
         //when
         //than
-        Assertions.assertThrows(BadRequestException.class, () ->  employeeService.checkAndSave(employee) );
+        Assertions.assertThrows(BadRequestException.class, () -> employeeService.checkAndSave(employee));
     }
+
     @Test
-    void checkAndSaveShouldThrowIncorrectInvoicingNumberException(){
+    void checkAndSaveShouldThrowIncorrectInvoicingNumberException() {
         //given
         Employee employee = Employee.builder()
                 .eid(1)
@@ -95,7 +99,7 @@ class EmployeeServiceTest {
         when(mockRepo.findById(anyInt())).thenReturn(Optional.empty());
         //when
         //than
-        Assertions.assertThrows(MyNotFoundException.class, () -> employeeService.checkAndUpdate(employee,1));
+        Assertions.assertThrows(MyNotFoundException.class, () -> employeeService.checkAndUpdate(employee, 1));
     }
 
     @Test
@@ -113,9 +117,9 @@ class EmployeeServiceTest {
         when(mockRepo.save(any(Employee.class))).thenReturn(employee);
         when(mockRepo.findById(anyInt())).thenReturn(Optional.of(employee));
         //when
-        employeeService.checkAndUpdate(employee,1);
+        employeeService.checkAndUpdate(employee, 1);
         //than
-        verify(mockRepo,times(1)).save(any(Employee.class));
+        verify(mockRepo, times(1)).save(any(Employee.class));
     }
 
     @Test
@@ -144,13 +148,13 @@ class EmployeeServiceTest {
         //when
         employeeService.delete(1);
         //than
-        verify(mockRepo,times(1)).delete(any(Employee.class));
+        verify(mockRepo, times(1)).delete(any(Employee.class));
     }
 
     @Test
     void deleteWith5ShouldThrowEmptyListException() {
         //given
-        when(mockRepo.findAll()).thenReturn(null);
+        when(mockRepo.findAll()).thenReturn(Collections.emptyList());
         //when
         //than
         Assertions.assertThrows(MyNotFoundException.class, () -> employeeService.deleteWith5());
@@ -175,7 +179,7 @@ class EmployeeServiceTest {
                 .address(Address.builder().addressId(1).addressType(AddressType.CURRENT).street(ANY_STRING).number(ANY_INT).build())
                 .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street(ANY_STRING).number(ANY_INT).build())
                 .build();
-        List<Employee> testList = Arrays.asList(employee1,employee2);
+        List<Employee> testList = Arrays.asList(employee1, employee2);
 
         when(mockRepo.findAll()).thenReturn(testList);
         //when
@@ -226,14 +230,14 @@ class EmployeeServiceTest {
                 .address(Address.builder().addressId(1).addressType(AddressType.CURRENT).street(ANY_STRING).number(ANY_INT).build())
                 .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street(ANY_STRING).number(ANY_INT).build())
                 .build();
-        List<Employee> testList = Arrays.asList(employee1,employee2,employee3,employee4,employee5);
+        List<Employee> testList = Arrays.asList(employee1, employee2, employee3, employee4, employee5);
 
         when(mockRepo.findAll()).thenReturn(testList);
         doNothing().when(mockRepo).delete(any(Employee.class));
         //when
         employeeService.deleteWith5();
         //than
-        verify(mockRepo,times(4)).delete(any(Employee.class));
+        verify(mockRepo, times(4)).delete(any(Employee.class));
     }
 
     @Test
@@ -255,13 +259,13 @@ class EmployeeServiceTest {
                 .address(Address.builder().addressId(1).addressType(AddressType.CURRENT).street(ANY_STRING).number(ANY_INT).build())
                 .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street(ANY_STRING).number(ANY_INT).build())
                 .build();
-        List<Employee> testList = Arrays.asList(employee1,employee2);
+        List<Employee> testList = Arrays.asList(employee1, employee2);
 
         when(mockRepo.findAll()).thenReturn(testList);
         //when
         employeeService.showAll();
         //than
-        verify(mockRepo,times(1)).findAll();
+        verify(mockRepo, times(1)).findAll();
     }
 
     @Test
@@ -273,6 +277,7 @@ class EmployeeServiceTest {
         Assertions.assertThrows(MyNotFoundException.class, () -> employeeService.showOne(1));
 
     }
+
     @Test
     void showOneShouldBeOk() {
         //given
@@ -289,6 +294,6 @@ class EmployeeServiceTest {
         //when
         employeeService.showOne(1);
         //than
-        verify(mockRepo,times(1)).findById(1);
+        verify(mockRepo, times(1)).findById(1);
     }
 }

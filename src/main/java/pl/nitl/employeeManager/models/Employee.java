@@ -1,6 +1,7 @@
 package pl.nitl.employeeManager.models;
 
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Employee {
 
     private boolean active;
 
-    @OneToMany(mappedBy = "employeeRef",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employeeRef", cascade = CascadeType.ALL)
     @Singular
     private List<Address> addresses;
 

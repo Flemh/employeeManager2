@@ -7,6 +7,7 @@ import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.AddressDto;
 import pl.nitl.employeeManager.views.EmployeeDto;
+
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -28,7 +29,7 @@ class EmployeeMapperTest {
                 .address(Address.builder().addressId(1).addressType(AddressType.CURRENT).street("boczna").number(7).build())
                 .address(Address.builder().addressId(2).addressType(AddressType.INVOICING).street("mila").number(5).build())
                 .build();
-       entity.getAddresses().forEach(address -> address.setEmployeeRef(entity));
+        entity.getAddresses().forEach(address -> address.setEmployeeRef(entity));
         //when
         EmployeeDto dto = mapper.employeeToEmployeeDto(entity);
         //than
@@ -41,7 +42,7 @@ class EmployeeMapperTest {
         assertNull(mapper.employeeToEmployeeDto(null));
     }
 
-   @Test
+    @Test
     void employeeDtoToEmployee() {
         //given
         EmployeeDto dto = EmployeeDto.builder()
@@ -62,6 +63,6 @@ class EmployeeMapperTest {
         assertEquals(dto.getPesel(), entity.getPesel());
         assertEquals(dto.isActive(), entity.isActive());
         assertEquals(dto.getAddresses().size(), entity.getAddresses().size());
-       assertNull(mapper.employeeDtoToEmployee(null));
+        assertNull(mapper.employeeDtoToEmployee(null));
     }
 }

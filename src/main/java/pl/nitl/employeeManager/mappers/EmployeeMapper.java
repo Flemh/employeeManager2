@@ -6,7 +6,7 @@ import org.mapstruct.Mappings;
 import pl.nitl.employeeManager.models.Employee;
 import pl.nitl.employeeManager.views.EmployeeDto;
 
-@Mapper(uses ={AddressMapper.class})
+@Mapper(uses = {AddressMapper.class})
 public interface EmployeeMapper {
 
     @Mappings({
