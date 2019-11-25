@@ -7,6 +7,7 @@ import pl.nitl.employeeManager.models.AddressType;
 import pl.nitl.employeeManager.views.AddressDto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,9 +33,8 @@ class AddressMapperTest {
                 .street("Lipna")
                 .number(8)
                 .build();
-        List<Address> addressesEntity = new ArrayList<>();
-        addressesEntity.add(address1);
-        addressesEntity.add(address2);
+        List<Address> addressesEntity = Arrays.asList(address1,address2);
+
         //when
         List<AddressDto> addressesDto = mapper.addressToAddressDto(addressesEntity);
         //then
@@ -57,9 +57,7 @@ class AddressMapperTest {
                 .street("Lipna")
                 .number(8)
                 .build();
-        List<AddressDto> addressesDto = new ArrayList<>();
-        addressesDto.add(address1);
-        addressesDto.add(address2);
+        List<AddressDto> addressesDto = Arrays.asList(address1,address2);
         //when
         List<Address> addressesEntity = mapper.addressDtoToAddress(addressesDto);
         //than
